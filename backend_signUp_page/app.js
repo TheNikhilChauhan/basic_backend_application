@@ -1,12 +1,14 @@
 import express from "express";
 import authRouter from "./routes/authRoute.js";
 import dbConnect from "./config/databaseConfig.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 dbConnect();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth/", authRouter);
 
