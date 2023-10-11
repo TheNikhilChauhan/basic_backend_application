@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
-
 function SignUp() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -9,25 +8,24 @@ function SignUp() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
-
-  const url = import.meta.env.VITE_APP_URL;
+  const URL = process.env.REACT_APP_URL;
 
   async function handleSignUp(e) {
-    e.preventDefault();
+    e.preventDefault(); // event.preventDefault() method to prevent the default behavior of an HTML form submission
+
     setLoading(true);
     try {
-      await axios({
+      const response = await axios({
         method: "post",
-        url: url + "/api/auth/signup",
+        url: URL + "/api/auth/signup",
         withCredentials: true,
-        data: userData,
+        data: userData
       });
 
       // the withCredentials property to 'true'. This tells the browser to include any cookies associated with the current domain in the request.
-
-      if (Response.data.success) {
+      if (response.data.success) {
         navigate("/signin");
       }
       setLoading(false);
@@ -36,6 +34,7 @@ function SignUp() {
       setLoading(false);
     }
   }
+
   return (
     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 m-4">
       <form className="space-y-6" onSubmit={(e) => handleSignUp(e)}>
@@ -43,7 +42,7 @@ function SignUp() {
           SignUp to our platform
         </h5>
 
-        {/* name */}
+        {/* email  */}
         <div className="mb-6">
           <label
             htmlFor="name"
@@ -61,14 +60,15 @@ function SignUp() {
             onChange={(e) => setUserData({ ...userData, name: e.target.value })}
           />
         </div>
+        {/* email end */}
 
-        {/* email */}
+        {/* email  */}
         <div className="mb-6">
           <label
             htmlFor="email"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your Email
+            Your email
           </label>
           <input
             type="email"
@@ -82,20 +82,22 @@ function SignUp() {
             }
           />
         </div>
+        {/* email end */}
 
         {/* password */}
         <div className="mb-6">
           <label
-            htmlFor="name"
+            htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Password
+            Your password
           </label>
           <input
             type="password"
             id="password"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            placeholder="enter password"
+            minLength="8"
+            placeholder="••••••••"
             required
             value={userData.password}
             onChange={(e) =>
@@ -103,6 +105,8 @@ function SignUp() {
             }
           />
         </div>
+        {/* password end */}
+
         {/* conform password */}
         <div className="mb-6">
           <label
@@ -115,7 +119,8 @@ function SignUp() {
             type="password"
             id="confirmPassword"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            placeholder="confirmPassword"
+            minLength="8"
+            placeholder="••••••••"
             required
             value={userData.confirmPassword}
             onChange={(e) =>
@@ -123,8 +128,9 @@ function SignUp() {
             }
           />
         </div>
+        {/* conform password end */}
 
-        {/* signup button */}
+        {/*  signUp button */}
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -150,17 +156,19 @@ function SignUp() {
             </svg>
           ) : null}
         </button>
+        {/* signUp button end */}
 
         {/* create account(signup) */}
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-          Already have an account?{" "}
+          Alerady have an account?{" "}
           <Link
             to="/signin"
-            className="text-blue-700 hover:underline dark:text-blue-500 "
+            className="text-blue-700 hover:underline dark:text-blue-500"
           >
             Sign In
           </Link>
         </div>
+        {/* create account(signup) end */}
       </form>
     </div>
   );

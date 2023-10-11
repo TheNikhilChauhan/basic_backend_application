@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [loading, setLoading] = useState(false);
-  const [logoutLoading, setLogoutLoading] = useState(false);
+  const [logoutLoading, setLogoutloading] = useState(false);
   const [userData, setUserData] = useState(false);
   const navigate = useNavigate();
 
-  const URL = import.meta.env.VITE_APP_URL;
+  const URL = process.env.REACT_APP_URL;
 
   useEffect(() => {
     getUser();
@@ -16,11 +17,13 @@ function Home() {
   async function getUser() {
     setLoading(true);
     try {
+      setLoading(false);
       const response = await axios({
         method: "get",
-        url: `${URL}/api/auth/getUser`,
+        url: URL + "/api/auth/getUser",
         withCredentials: true,
       });
+
       if (response.data.success) {
         setUserData(response.data.data);
       }
@@ -29,28 +32,29 @@ function Home() {
       navigate("/signin");
       setLoading(false);
     }
+  }
 
-    async function handleLogout() {
-      setLogoutLoading(true);
-      try {
-        const response = await axios({
-          method: "get",
-          url: `${URL}/api/auth/logout`,
-          withCredentials: true,
-        });
-
-        if (response.data.success) {
-          navigate("/signin");
-        }
-        setLogoutLoading(false);
-      } catch (error) {
-        setLogoutLoading(false);
+  async function handleLogout() {
+    setLogoutloading(true);
+    try {
+      const response = await axios({
+        method: "get",
+        url: URL + "/api/auth/logout",
+        withCredentials: true,
+      });
+      if (response.data.success) {
+        navigate("/signin");
       }
+      setLogoutloading(false);
+    } catch (error) {
+      setLogoutloading(false);
     }
   }
+
   return (
     <>
       {loading ? (
+        // loading
         <svg
           aria-hidden="true"
           role="status"
@@ -69,14 +73,17 @@ function Home() {
           />
         </svg>
       ) : (
+        // loading
+        // user details
         <>
           <div className=" leading-10">
+            {" "}
             <h2 className="text-5xl text-white">
-              Hello
+              Hello{" "}
               <span className="  text-orange-400 font-bold">
-                {userData.name}
+                {userData.name}{" "}
               </span>
-              How are ya?
+              How are you?
             </h2>
             <p className=" text-orange-400 font-bold float-right">
               {userData.email}
@@ -125,6 +132,7 @@ function Home() {
             )}
           </button>
         </>
+        // user details
       )}
     </>
   );

@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
-function ForgotPassword() {
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const url = import.meta.env.VITE_APP_URL;
+function SignIn() {
   const navigate = useNavigate();
 
-  async function handleForgotPassword(e) {
-    e.preventDefault();
-    setLoading(true);
+  const [loading, setLoading] = useState(false);
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const URL = process.env.REACT_APP_URL;
 
+  async function handleSignIn(e) {
+    e.preventDefault(); // event.preventDefault() method to prevent the default behavior of an HTML form submission
+    setLoading(true);
     try {
       const response = await axios({
         method: "post",
-        url: url + "/api/auth/forgotPassword",
-        data: { email },
+        url: URL + "/api/auth/signin",
+        withCredentials: true,
+        data: credentials
       });
-
       if (response.data.success) {
-        navigate("/reset-password" + response.data.token);
+        navigate("/");
       }
       setLoading(false);
     } catch (error) {
@@ -28,40 +28,77 @@ function ForgotPassword() {
       setLoading(false);
     }
   }
+
   return (
     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 m-4">
-      <form className="space-y-6" onSubmit={(e) => handleForgotPassword(e)}>
+      <form className="space-y-6" onSubmit={(e) => handleSignIn(e)}>
         <h5 className="text-xl font-medium text-gray-900 dark:text-white">
-          Forgot Password
+          Signin to our platform
         </h5>
-
-        {/* email */}
+        {/* email  */}
         <div>
           <label
             htmlFor="email"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your Email
+            Your email
           </label>
           <input
             type="email"
             name="email"
             id="email"
-            placeholder="name@company.com"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+            placeholder="name@company.com"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={credentials.email}
+            onChange={(e) =>
+              setCredentials({ ...credentials, email: e.target.value })
+            }
           />
         </div>
+        {/* email end */}
+        {/* password */}
+        <div>
+          <label
+            htmlFor="password"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Your password
+          </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="••••••••"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+            required
+            minLength="8"
+            value={credentials.password}
+            onChange={(e) =>
+              setCredentials({ ...credentials, password: e.target.value })
+            }
+          />
+        </div>
+        {/* password end */}
 
-        {/* sign in button */}
+        {/*  forgot-password */}
+        <div className="flex items-start">
+          <Link
+            to="/forgot-password"
+            className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
+          >
+            Forgot Password?
+          </Link>
+        </div>
+        {/* forgot-Password */}
 
+        {/*  signIn button  */}
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Submit
+          Login to your account
+          {/* loading */}
           {loading ? (
             <svg
               aria-hidden="true"
@@ -81,22 +118,24 @@ function ForgotPassword() {
               />
             </svg>
           ) : null}
+          {/* loading end */}
         </button>
+        {/* signIn button end */}
 
-        {/* sign in */}
-        <div>
-          Go to{" "}
+        {/* create account(signup) */}
+        <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
+          Not registered?{" "}
           <Link
-            to="/signin"
+            to="/signup"
             className="text-blue-700 hover:underline dark:text-blue-500"
           >
-            Sign In
-          </Link>{" "}
-          page
+            Create account
+          </Link>
         </div>
+        {/* create account(signup) end */}
       </form>
     </div>
   );
 }
 
-export default ForgotPassword;
+export default SignIn;

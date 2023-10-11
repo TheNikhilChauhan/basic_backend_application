@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 function ResetPassword() {
   const navigate = useNavigate();
@@ -7,19 +8,18 @@ function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState({
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
-  const url = import.meta.env.VITE_APP_URL;
 
+  const URL = process.env.REACT_APP_URL;
   async function handleResetPassword(e) {
-    e.preventDefault();
+    e.preventDefault(); // event.preventDefault() method to prevent the default behavior of an HTML form submission
     setLoading(true);
-
     try {
       const response = await axios({
         method: "post",
-        url: url + "/api/auth/reset-password" + resetPasswordToken,
-        data: password,
+        url: URL + "/api/auth/resetpassword/" + resetPasswordToken,
+        data: password
       });
 
       if (response.data.success) {
@@ -32,13 +32,13 @@ function ResetPassword() {
       setLoading(false);
     }
   }
+
   return (
     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 m-4">
       <form className="space-y-6" onSubmit={(e) => handleResetPassword(e)}>
         <h5 className="text-xl font-medium text-gray-900 dark:text-white">
           Reset Password
         </h5>
-
         {/* password */}
         <div>
           <label
@@ -51,9 +51,9 @@ function ResetPassword() {
             type="password"
             name="password"
             id="password"
-            placeholder="enter password"
-            required
+            placeholder="••••••••"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+            required
             minLength="8"
             value={password.password}
             onChange={(e) =>
@@ -61,8 +61,8 @@ function ResetPassword() {
             }
           />
         </div>
-
-        {/* confirm password */}
+        {/* password end */}
+        {/* confirm  password */}
         <div>
           <label
             htmlFor="confirmPassword"
@@ -84,14 +84,14 @@ function ResetPassword() {
             }
           />
         </div>
-
-        {/* sign in button */}
+        {/* conform password end */}
+        {/*  signIn button  */}
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          {" "}
-          Reset Password
+          Reset password
+          {/* loading */}
           {loading ? (
             <svg
               aria-hidden="true"
@@ -111,9 +111,11 @@ function ResetPassword() {
               />
             </svg>
           ) : null}
+          {/* loading end */}
         </button>
+        {/* signIn button end */}
 
-        {/* sign in */}
+        {/* signIn  */}
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
           Go to{" "}
           <Link
@@ -124,6 +126,7 @@ function ResetPassword() {
           </Link>{" "}
           page
         </div>
+        {/* singIn */}
       </form>
     </div>
   );

@@ -1,28 +1,27 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function SignIn() {
-  const navigate = useNavigate();
+function ForgotPassword() {
   const [loading, setLoading] = useState(false);
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
-  const URL = import.meta.env.VITE_APP_URL;
+  const [email, setEmail] = useState('');
+  const URL = process.env.REACT_APP_URL;
+  const navigate = useNavigate();
 
-  async function handleSignIn(e) {
-    e.preventDefault();
+  async function handleForgotpassword(e) {
+    e.preventDefault(); // event.preventDefault() method to prevent the default behavior of an HTML form submission
+
     setLoading(true);
     try {
       const response = await axios({
-        method: "post",
-        url: `${URL}/api/auth/signin`,
-        withCredentials: true,
-        data: credentials,
+        method: 'post',
+        url: URL + '/api/auth/forgotpassword',
+        data: { email },
       });
+
       if (response.data.success) {
-        navigate("/");
+        navigate('/reset-password/' + response.data.token);
       }
       setLoading(false);
     } catch (error) {
@@ -30,73 +29,41 @@ function SignIn() {
       setLoading(false);
     }
   }
+
   return (
     <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 m-4">
-      <form className="space-y-6" onSubmit={(e) => handleSignIn(e)}>
+      <form className="space-y-6" onSubmit={(e) => handleForgotpassword(e)}>
         <h5 className="text-xl font-medium text-gray-900 dark:text-white">
-          Signin to our platform
+          Forgot password
         </h5>
-
-        {/* email */}
+        {/* email  */}
         <div>
           <label
             htmlFor="email"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Your Email
+            Your email
           </label>
           <input
             type="email"
-            id="email"
             name="email"
+            id="email"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
             placeholder="name@company.com"
             required
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            value={credentials.email}
-            onChange={(e) =>
-              setCredentials({ ...credentials, email: e.target.value })
-            }
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
+        {/* email end */}
 
-        {/* password */}
-        <div>
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="enter password"
-            required
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            value={credentials.password}
-            onChange={(e) =>
-              setCredentials({ ...credentials, password: e.target.value })
-            }
-          />
-        </div>
-
-        {/* forgot password */}
-        <div className="flex items-start">
-          <Link
-            to="/forgot-password"
-            className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
-          >
-            Forgot Password?
-          </Link>
-        </div>
-
-        {/* sign in button */}
+        {/*  signIn button  */}
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Login
+          Submit
+          {/* loading */}
           {loading ? (
             <svg
               aria-hidden="true"
@@ -116,21 +83,25 @@ function SignIn() {
               />
             </svg>
           ) : null}
+          {/* loading end */}
         </button>
+        {/* signIn button end */}
 
-        {/* create account link  */}
+        {/* signIn  */}
         <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-          Not Registered?{" "}
+          Go to{' '}
           <Link
-            to="/signup"
+            to="/signin"
             className="text-blue-700 hover:underline dark:text-blue-500"
           >
-            Create Account
-          </Link>
+            Sign in
+          </Link>{' '}
+          page
         </div>
+        {/* singIn */}
       </form>
     </div>
   );
 }
 
-export default SignIn;
+export default ForgotPassword;
