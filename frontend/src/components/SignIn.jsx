@@ -9,7 +9,7 @@ function SignIn() {
     email: "",
     password: "",
   });
-  const url = import.meta.env.VITE_APP_URL;
+  const URL = import.meta.env.VITE_APP_URL;
 
   async function handleSignIn(e) {
     e.preventDefault();
@@ -17,7 +17,7 @@ function SignIn() {
     try {
       const response = await axios({
         method: "post",
-        url: url + "/api/auth/signin",
+        url: `${URL}/api/auth/signin`,
         withCredentials: true,
         data: credentials,
       });

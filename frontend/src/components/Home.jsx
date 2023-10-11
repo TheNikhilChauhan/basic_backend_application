@@ -7,7 +7,7 @@ function Home() {
   const [userData, setUserData] = useState(false);
   const navigate = useNavigate();
 
-  const url = import.meta.env.VITE_APP_URL;
+  const URL = import.meta.env.VITE_APP_URL;
 
   useEffect(() => {
     getUser();
@@ -18,7 +18,7 @@ function Home() {
     try {
       const response = await axios({
         method: "get",
-        url: url + "/api/auth/user",
+        url: `${URL}/api/auth/getUser`,
         withCredentials: true,
       });
       if (response.data.success) {
@@ -35,7 +35,7 @@ function Home() {
       try {
         const response = await axios({
           method: "get",
-          url: url + "/api/auth/logout",
+          url: `${URL}/api/auth/logout`,
           withCredentials: true,
         });
 
